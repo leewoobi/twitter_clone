@@ -9,8 +9,7 @@ const Nweet = ({nweetObj,isOwner}) => {
         const ok = window.confirm('삭제할거임?');
         console.log(ok)
         if(ok){
-        await   dbService.doc(`nweets/${nweetObj.id}`).delete(); 
-
+            await dbService.doc(`nweets/${nweetObj.id}`).delete(); 
         }
     };
     const toggleEditing = () => setEditing((prev)=> !prev);
@@ -44,6 +43,7 @@ const Nweet = ({nweetObj,isOwner}) => {
             ) : (
             <> 
             <h4>{nweetObj.text}</h4> 
+            {nweetObj.attachmentUrl && <img src = {nweetObj.attachmentUrl} width="50px"  height="50px"/>}
             { isOwner && ( 
                 <>
                     <button onClick={onDeleteClick}>Delete Nweet</button>
