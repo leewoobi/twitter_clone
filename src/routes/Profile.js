@@ -1,16 +1,46 @@
-import { authService } from "fbase";
-import React from "react";
+import { authService, dbService } from "fbase";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router";
+import { useState } from "react/cjs/react.development";
 
 
-export default () =>{
+export default ({userObj}) =>{
     const history = useHistory();
+    const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
     const onLogOutClick = () => {
         authService.signOut();
         history.push("/");
+    };
+    const onChange = (event) => {
+        const { 
+            target: {value},
+        } = event;
+        setNewDisplayName(value);
     }
+    const onSubmit = (event) => {
+        event.preventDefault();
+    };
+    // const getMyNweets = async()=> {
+    //     const nweets = await dbService
+    //         .collection("nweets")
+    //         .where("creatorId", "==", userObj.uid) //필터링 
+    //         .orderBy("createdAt")
+    //         .get();
+    //         console.log(nweets.docs.map((doc) => doc.data()));
+    // }
+    // useEffect(()=>{
+    //     getMyNweets();
+    // }, [])
     return (
         <>
+         <form onSubmit={onSubmit}>
+            <input 
+            onChange={onChange}
+            type="text"
+            placeholder="Display name"
+            value ={newDisplayName}
+            />
+         </form>
         <button onClick={onLogOutClick}> Log Out</button>
         </>
     )

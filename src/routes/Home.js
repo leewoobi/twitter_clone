@@ -8,7 +8,7 @@ const Home = ({userObj}) => {
     console.log(userObj);
     const [nweet, setNweet] = useState("");
     const [nweets, setNweets] = useState([]);
-    const [attachment,setAttachment] = useState();
+    const [attachment,setAttachment] = useState("");
 
     useEffect(()=>{ 
        dbService.collection("nweets").onSnapshot((snapshop) => {
@@ -22,13 +22,13 @@ const Home = ({userObj}) => {
     const onSubmit = async (event) => {
      event.preventDefault();
      let attachmentUrl = "";
-     if( attachment != ""){
+     if( attachment !== ""){
         const attachmentRef =  storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
         const response = await attachmentRef.putString(attachment,"data_url");
         attachmentUrl = await response.ref.getDownloadURL();
      }
      const nweetObj = {
-                   text: nweet,
+            text: nweet,
             createdAt : Date.now(),
             creatorId: userObj.uid,
             attachmentUrl
