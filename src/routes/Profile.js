@@ -1,10 +1,10 @@
 import { authService, dbService } from "fbase";
-import React, { useEffect } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import { useState } from "react/cjs/react.development";
 
 
-export default ({userObj}) =>{
+export default ({refreshUser,userObj}) =>{
     const history = useHistory();
     const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
     const onLogOutClick = () => {
@@ -17,8 +17,14 @@ export default ({userObj}) =>{
         } = event;
         setNewDisplayName(value);
     }
-    const onSubmit = (event) => {
+    const onSubmit = async (event) => {
         event.preventDefault();
+        if(userObj.displayName !== newDisplayName){
+           const response = await userObj.updateProfile({
+                displayName : newDisplayName
+            });
+            refreshUser();
+        }
     };
     // const getMyNweets = async()=> {
     //     const nweets = await dbService
@@ -40,6 +46,7 @@ export default ({userObj}) =>{
             placeholder="Display name"
             value ={newDisplayName}
             />
+            <input type="submit" value="Update Profile"/>
          </form>
         <button onClick={onLogOutClick}> Log Out</button>
         </>
